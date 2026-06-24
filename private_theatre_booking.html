@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous" />
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <title>Private Theatre Event Booking</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --primary: #4256c2;
+            --accent: #ffc700;
+            --bg: #e9f0fb;
+            --container-bg: #fff;
+            --text: #171c2b;
+            --radius: 16px;
+            --shadow-3d: 0 8px 32px -8px #b7baf744, 0 6px 28px #2b3b9333;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: Segoe UI, Arial, sans-serif;
+            margin: 0;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: var(--primary);
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0.88em 1em;
+            box-shadow: 0 3px 16px #202c5a11;
+        }
+
+        .nav-brand {
+            font-size: 1.33em;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 2px 9px #01162e41;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 0.45em;
+        }
+
+        .nav-menu a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.56em 1.18em;
+            border-radius: var(--radius);
+            transition: background 0.14s, color 0.15s;
+        }
+
+        .nav-menu a.active,
+        .nav-menu a:hover {
+            background: linear-gradient(90deg, #fdfcda, #fbc606 42%, #f0e06fce);
+            color: #232442;
+        }
+
+        #nav-toggle {
+            display: none;
+        }
+
+        /* New Hamburger SVG Icon for Mobile */
+        .nav-toggle-label svg {
+            display: none;
+            width: 34px;
+            height: 34px;
+            margin: 4px 0;
+            cursor: pointer;
+        }
+
+        @media (max-width:800px) {
+            .nav-menu {
+                flex-direction: column;
+                gap: 0;
+                padding: 0;
+                position: absolute;
+                top: 63px;
+                left: 0;
+                right: 0;
+                background: var(--primary);
+                display: none;
+            }
+
+            .nav-menu.open {
+                display: flex;
+            }
+
+            .nav-menu a {
+                margin: 5px 0;
+            }
+
+            .nav-toggle-label svg {
+                display: block;
+            }
+        }
+
+        #nav-toggle:checked~.nav-menu {
+            display: flex;
+        }
+
+        .hero {
+            text-align: center;
+            position: relative;
+            padding: 3.3rem 2rem 2.3rem;
+            color: #fff;
+            border-radius: var(--radius);
+            margin-bottom: 2rem;
+            min-height: 340px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background:
+                linear-gradient(121deg, rgba(41, 45, 80, 0.81) 54%, rgba(255, 199, 0, 0.08)),
+                url('https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=1280&q=60') center center/cover no-repeat;
+            box-shadow: 0 16px 48px #23235319, 0 0 0 7px #5342ba08;
+        }
+
+        .hero:before {
+            content: "";
+            display: block;
+            position: absolute;
+            background: linear-gradient(105deg, #6c589c1d 12%, #12112b55 90%, transparent 110%);
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .hero>* {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 2.15em;
+            max-width: 660px;
+            margin: 1.1em auto 0.33em auto;
+            text-shadow: 0 2px 10px #001c38a0;
+        }
+
+        .hero p {
+            max-width: 700px;
+            font-size: 1.16em;
+            line-height: 1.45;
+            background: rgba(33, 37, 64, 0.14);
+            border-radius: 13px;
+            padding: 0.65em 2vw;
+            text-shadow: 0 2px 8px #001c3841;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            background: linear-gradient(126deg, #fff9 60%, #e9eafdad 110%);
+            border-radius: var(--radius);
+            box-shadow: 0 4px 22px #4344a916, var(--shadow-3d);
+            padding: 2rem 2.5vw;
+            backdrop-filter: blur(4px);
+            border: 1px solid #e3eafd43;
+        }
+
+        .section-nav {
+            display: flex;
+            justify-content: center;
+            gap: 22px;
+            margin: 1.7em 0 0.2em 0;
+        }
+
+        .section-nav .btn.backnext {
+            background: linear-gradient(96deg, #3254a4 60%, #1e2445 115%);
+            color: #fff !important;
+            font-size: 1.07em;
+            box-shadow: 0 4px 18px #2038b04a, 0 2px 9px #0e172966;
+        }
+
+        .section-nav .btn.backnext:hover,
+        .section-nav .btn.backnext:focus {
+            background: #23294d !important;
+            color: #ffc700 !important;
+        }
+
+        .section-nav .btn.backnext:disabled {
+            background: #636a8a !important;
+            color: #ececec !important;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(94deg, #ffe583 0%, #f6ca07 100%);
+            color: var(--primary);
+            padding: 0.87rem 2.19rem;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 1.13em;
+            font-weight: 600;
+            margin-right: 0.58em;
+            margin-top: 0.7em;
+            transition: background .14s, color .13s, transform .15s;
+            box-shadow: 0 2px 8px #dbe8f773;
+            will-change: transform;
+        }
+
+        .btn:active,
+        .btn:focus {
+            transform: scale(.98);
+        }
+
+        .btn:disabled {
+            background: #eee !important;
+            color: #aaa !important;
+            cursor: not-allowed;
+        }
+
+        .btn:hover {
+            background: #fffbe8;
+            color: #b89619;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            margin: 0.5rem 0 1.1rem 0;
+            border-radius: var(--radius);
+            border: 1px solid #d3d8e0;
+            font-size: 1em;
+            box-sizing: border-box;
+            background: #f5f8ff;
+        }
+
+        input[type=date],
+        input[type=time],
+        input[type=number] {
+            max-width: 180px;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: 2px solid var(--primary);
+            background: #eef5ff;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.1em;
+        }
+
+        ul,
+        ol {
+            margin-left: 1.7rem;
+            font-size: 1.05em;
+        }
+
+        .movie-cards {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            gap: 2rem;
+            padding-bottom: 0.6rem;
+            scroll-snap-type: x mandatory;
+        }
+
+        .movie-card {
+            background: linear-gradient(132deg, #fff9de74 0%, #d1e3fc21 100%);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-3d);
+            flex: 0 0 226px;
+            min-width: 226px;
+            max-width: 260px;
+            padding: 1.1rem;
+            margin-bottom: 1.3rem;
+            margin-right: 0;
+            transition: box-shadow .15s, transform .14s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            border: 1.17px solid #b0bbda25;
+            will-change: transform, box-shadow;
+            position: relative;
+            scroll-snap-align: start;
+        }
+
+        .movie-card:hover {
+            box-shadow: 0 10px 29px #384dc879, 0 6px 18px #aabbd90c, 0 2.5px 18px #23245a1f;
+            transform: translateY(-7px) scale(1.04) rotateX(1.5deg);
+        }
+
+        .movie-card img {
+            width: 100%;
+            height: 178px;
+            object-fit: cover;
+            background: #dde6f5;
+            border-radius: var(--radius);
+            margin-bottom: 10px;
+        }
+
+        .movie-card .btn {
+            width: 100%;
+        }
+
+        .movie-rating {
+            margin-top: 5px;
+            font-weight: bold;
+            color: #e2c009;
+            font-size: 1.09em;
+            letter-spacing: 0.07em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            text-shadow: 0 1px 4px #fffbe546;
+        }
+
+        .theatre-list,
+        .gallery-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .theatre-card {
+            background: linear-gradient(132deg, #fff9de74 0%, #d1e3fc21 100%);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-3d);
+            flex: 1 1 240px;
+            padding: 1.12rem;
+            min-width: 220px;
+            margin-bottom: 1.3rem;
+            transition: box-shadow .15s, transform .14s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            border: 1.17px solid #b0bbda25;
+            will-change: transform, box-shadow;
+            position: relative;
+        }
+
+        .theatre-card:hover {
+            box-shadow: 0 22px 59px #384dc879, 0 7px 18px #aabbd90c, 0 2.5px 18px #23245a1c;
+            transform: translateY(-7px) scale(1.04) rotateX(1.5deg);
+        }
+
+        .theatre-card img {
+            width: 100%;
+            height: 178px;
+            object-fit: cover;
+            background: #dde6f5;
+            border-radius: var(--radius);
+        }
+
+        #theatre-detail-content img {
+            margin-bottom: 1em;
+        }
+
+        #payment-status {
+            color: #099944;
+            font-weight: bold;
+            display: none;
+        }
+
+        #seat-warning {
+            color: #c91313;
+            font-weight: bold;
+            display: none;
+            margin-bottom: 12px;
+        }
+
+        .seat-map {
+            display: grid;
+            grid-template-columns: repeat(10, 36px);
+            gap: 8px 10px;
+            justify-content: center;
+            margin: 1em 0;
+        }
+
+        .seat-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 7px;
+            background: #fff;
+            color: var(--primary);
+            border: 2px solid #c6d3ef;
+            font-weight: bold;
+            font-size: 1em;
+            cursor: pointer;
+            box-shadow: 0 1px 5px #acbfd853;
+        }
+
+        .seat-btn.selected {
+            background: var(--accent);
+            border-color: #ffd700;
+            color: var(--primary);
+            box-shadow: 0 1px 6px #fee8b98c;
+        }
+
+        .seat-btn.booked {
+            background: #b8becf;
+            border: 2.3px solid #888c9e;
+            color: #555;
+            cursor: not-allowed;
+        }
+
+        .seat-btn:hover:not(.booked):not(.selected) {
+            background: #fbf6e1;
+            color: #976e00;
+        }
+
+        .seat-map-label {
+            grid-column: 1/-1;
+            text-align: center;
+            font-weight: bold;
+            margin: 0.2em 0 0 0;
+            text-shadow: 0 1px 7px #fffceb94;
+        }
+
+        .gallery-img {
+            width: 210px;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 13px;
+            box-shadow: 0 2px 9px #9fd3ed38;
+        }
+
+        @media (max-width:1100px) {
+            .container {
+                padding: 1.05rem 1vw;
+            }
+
+            .theatre-list,
+            .gallery-list {
+                flex-direction: column;
+                gap: 1.09rem;
+            }
+
+            .theatre-card {
+                max-width: 99%
+            }
+
+            .theatre-card {
+                min-width: 0;
+            }
+        }
+
+        @media (max-width:900px) {
+            .movie-cards {
+                gap: 1.15rem;
+            }
+
+            .movie-card {
+                min-width: 72vw;
+                max-width: 85vw;
+            }
+        }
+
+        @media (max-width:560px) {
+            .movie-cards {
+                gap: 0.7rem;
+            }
+
+            .movie-card {
+                min-width: 92vw;
+                max-width: 99vw;
+            }
+        }
+
+        @media (max-width:750px) {
+            .seat-map {
+                grid-template-columns: repeat(5, 36px);
+            }
+
+            .container {
+                padding: 1.1rem 2vw;
+            }
+        }
+
+        footer {
+            background: var(--primary);
+            color: #fffde7;
+            text-align: center;
+            padding: 1.1rem 0 1.7rem 0;
+            margin-top: 3rem;
+            border-radius: var(--radius) var(--radius) 0 0;
+            font-size: .96rem;
+        }
+
+        .footer-social {
+            margin-top: 1.2em;
+            display: flex;
+            justify-content: center;
+            gap: 2.2em;
+        }
+
+        .footer-social a {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .footer-social svg {
+            width: 36px;
+            height: 36px;
+            vertical-align: middle;
+            fill: #fffde7;
+            transition: fill 0.18s;
+        }
+
+        .footer-social a:hover svg,
+        .footer-social a:focus svg {
+            fill: #ffc700;
+        }
+
+        .hide {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar">
+            <span class="nav-brand">🎬 Private Theatre Events</span>
+            <input type="checkbox" id="nav-toggle">
+            <label for="nav-toggle" class="nav-toggle-label">
+                <svg id="menu-icon" width="32" height="32" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+                    <rect y="6" width="32" height="4" rx="2" fill="#fff" />
+                    <rect y="14" width="32" height="4" rx="2" fill="#fff" />
+                    <rect y="22" width="32" height="4" rx="2" fill="#fff" />
+                </svg>
+            </label>
+            <div class="nav-menu">
+                <a data-page="home" class="active">Home</a>
+                <a data-page="theatres">Theatres</a>
+                <a data-page="movies">Movies</a>
+                <a data-page="book">Book</a>
+                <a data-page="bookings">My Bookings</a>
+                <a data-page="pricing">Pricing</a>
+                <a data-page="faq">FAQ</a>
+                <a data-page="gallery">Gallery</a>
+                <a data-page="admin">Admin</a>
+            </div>
+        </nav>
+    </header>
+    <!-- (All page containers and forms as in previous versions, unchanged) -->
+    <div class="container hero section-page" id="page-home">
+        <h1>Celebrate Special Events in a Private Theatre!</h1>
+        <p>
+            Book your private theatre in Etcherla, Andhra Pradesh for birthdays, reunions, corporate parties, and more.<br>
+            Luxury seating, custom decor, catering, and movies of your choice.
+        </p>
+        <div class="section-nav"><button class="btn backnext" id="next-home">Next &rarr; Theatres</button></div>
+    </div>
+    <div class="container section-page" id="page-home2" style="margin-top:-32px">
+        <h2>Why Choose Us?</h2>
+        <ul>
+            <li>Choose from multiple theatre locations</li>
+            <li>Modern amenities with high-quality AV and luxury seating</li>
+            <li>Flexible event packages (Birthday, Anniversary, Corporate, etc.)</li>
+            <li>Easy Online Booking</li>
+            <li>Privacy and Custom Decorations</li>
+        </ul>
+    </div>
+    <div class="container section-page" id="page-theatres" style="display:none">
+        <h2>Available Theatres</h2>
+        <div class="theatre-list" id="theatre-cards"></div>
+        <div class="section-nav">
+            <button class="btn backnext" id="back-theatres">&larr; Back: Home</button>
+            <button class="btn backnext" id="next-theatres">Next &rarr; Movies</button>
+        </div>
+    </div>
+    <div class="container section-page" id="page-theatre-details" style="display:none">
+        <h2>Theatre Details</h2>
+        <div id="theatre-detail-content"></div>
+        <a class="btn" id="book-this-theatre" href="#">Book This Theatre</a>
+        <div class="section-nav">
+            <button class="btn backnext" id="back-theatre-details">&larr; Back: Theatres</button>
+            <button class="btn backnext" id="next-theatre-details">Next &rarr; Movies</button>
+        </div>
+    </div>
+    <div class="container section-page" id="page-movies" style="display:none">
+        <h2>Now Showing: Choose a Movie</h2>
+        <div class="movie-cards" id="movies-list"></div>
+        <div class="section-nav">
+            <button class="btn backnext" id="back-movies">&larr; Back: Theatres</button>
+            <button class="btn backnext" id="next-movies">Next &rarr; Book</button>
+        </div>
+    </div>
+    <div class="container section-page" id="page-book" style="display:none;">
+        <h2>Book a Private Theatre Event</h2>
+        <form id="bookingForm" autocomplete="off">
+            <label>Your Name* <input required name="name" /></label>
+            <label>Email <input required type="email" name="email" /></label>
+            <label>Choose Theatre <select name="theatre" id="theatre-select" required></select></label>
+            <label>Event Type <select name="eventType" required>
+                    <option>Birthday</option>
+                    <option>Anniversary</option>
+                    <option>Friends/Family Gathering</option>
+                    <option>Corporate/Office Party</option>
+                    <option>Others</option>
+                </select></label>
+            <label>Pick a Movie <select name="movie" id="movie-select" required></select></label>
+            <div style="font-weight:500;" id="seat-count-info"></div>
+            <div id="seat-map-container"></div>
+            <label>Date <input type="date" name="date" required /></label>
+            <label>Time <input type="time" name="time" required /></label>
+            <div id="seat-warning"></div>
+            <button class="btn" type="button" id="fakePayNow">Pay Now & Book</button>
+            <p id="payment-status">Payment Successful!</p>
+        </form>
+        <div class="section-nav">
+            <button class="btn backnext" id="back-book">&larr; Back: Movies</button>
+            <button class="btn backnext" id="next-bookings">Next &rarr; My Bookings</button>
+        </div>
+    </div>
+    <div class="container section-page" id="page-bookings" style="display:none;">
+        <h2>Your Bookings</h2>
+        <div id="bookingsList"></div>
+        <div class="section-nav"><button class="btn backnext" id="back-bookings">&larr; Back: Book Movie</button><button class="btn backnext" id="next-pricing">Next &rarr; Pricing</button></div>
+    </div>
+    <div class="container section-page" id="page-pricing" style="display:none;">
+        <h2>Pricing & Packages</h2>
+        <ul>
+            <li>Birthday Basic (Up to 25 people): <b>₹5,000</b></li>
+            <li>Family Pack (Up to 50 people): <b>₹8,500</b></li>
+            <li>Premium Corporate: <b>₹12,000</b></li>
+            <li>Add-ons: Decoration, Food, Games, DJ, etc. (ask for quote)</li>
+        </ul>
+        <div class="section-nav">
+            <button class="btn backnext" id="back-pricing">&larr; Back: My Bookings</button>
+            <button class="btn backnext" id="next-faq">Next &rarr; FAQ</button>
+        </div>
+    </div>
+    <div class="container section-page" id="page-faq" style="display:none;">
+        <h2>Frequently Asked Questions</h2>
+        <ol>
+            <li><b>What events can I celebrate?</b> Birthdays, anniversaries, reunions, office parties, pre-wedding, etc.</li>
+            <li><b>Can I bring my own food?</b> Yes, or choose from our in-house catering partners.</li>
+            <li><b>How do I pay?</b> Pay at venue or online (UPI/Net-banking).</li>
+            <li><b>How far in advance should I book?</b> Minimum 3 days in advance is recommended.</li>
+        </ol>
+        <div class="section-nav">
+            <button class="btn backnext" id="back-faq">&larr; Back: Pricing</button>
+            <button class="btn backnext" id="next-gallery">Next &rarr; Gallery</button>
+        </div>
+    </div>
+    <div class="container section-page" id="page-gallery" style="display:none;">
+        <h2>Event Gallery</h2>
+        <div class="gallery-list">
+            <img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&fit=crop&w=400&q=80" alt="Event 1" class="gallery-img" />
+            <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80" alt="Event 2" class="gallery-img" />
+            <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=400&q=80" alt="Event 3" class="gallery-img" />
+            <img src="https://images.unsplash.com/photo-1462536943532-57a629f6cc60?auto=format&fit=crop&w=400&q=80" alt="Event 4" class="gallery-img" />
+        </div>
+        <div class="section-nav">
+            <button class="btn backnext" id="back-gallery">&larr; Back: FAQ</button>
+            <button class="btn backnext" id="next-admin">Next &rarr; Admin</button>
+        </div>
+    </div>
+    <div class="container section-page" id="page-admin" style="display:none;">
+        <h2>Admin Panel (Bookings List)</h2>
+        <form id="adminLogin" style="margin-bottom:1.5em">
+            <input id="adminPass" type="password" placeholder="Enter admin password" />
+            <button class="btn" type="submit">Login</button>
+            <span id="adminLoginMsg" style="margin-left:8px;display:none;"></span>
+        </form>
+        <div id="adminBookingsTable" style="display:none"></div>
+        <div class="section-nav"><button class="btn backnext" id="back-admin">&larr; Back: Gallery</button></div>
+    </div>
+    <footer>
+        &copy; 2025 Private Theatre Event Celebration Booking System
+        <div class="footer-social">
+            <a href="https://www.linkedin.com/in/vasu-gadi" target="_blank" title="LinkedIn">
+                <svg viewBox="0 0 32 32" fill="currentColor">
+                    <circle cx="16" cy="16" r="16" fill="#1a64bc" />
+                    <rect x="7" y="13" width="4" height="12" fill="#fff" />
+                    <circle cx="9" cy="10" r="2" fill="#fff" />
+                    <rect x="14" y="16" width="4" height="9" fill="#fff" />
+                    <rect x="14" y="16" width="4" height="4" fill="#fff" />
+                    <path d="M18 20c0-3 4-3 4 0v5h-4z" fill="#fff" />
+                </svg>
+            </a>
+        </div>
+    </footer>
+    <script>
+        // -- DATA (Unsplash/Pexels images for movies) --
+        let movieList = [{
+                title: "Dune: Part Two",
+                img: "https://res.cloudinary.com/dq9kmmf7b/image/upload/v1754120679/Screenshot_20250802-130040_2_jiag6z.jpg",
+                genre: "Sci-Fi, Adventure",
+                price: 350,
+                seats: 45,
+                rating: 4.8
+            },
+            {
+                title: "Kung Fu Panda 4",
+                img: "https://res.cloudinary.com/dq9kmmf7b/image/upload/v1754121325/Screenshot_20250802-132402_2_roj47m.jpg",
+                genre: "Animation, Comedy",
+                price: 300,
+                seats: 50,
+                rating: 4.1
+            },
+            {
+                title: "Fighter",
+                img: "https://res.cloudinary.com/dq9kmmf7b/image/upload/v1754121446/Screenshot_20250802-132614_2_kzs0f3.jpg",
+                genre: "Action, Thriller",
+                price: 320,
+                seats: 38,
+                rating: 3.9
+            },
+            {
+                title: "Godzilla x Kong: The New Empire",
+                img: "https://res.cloudinary.com/dq9kmmf7b/image/upload/v1754121772/Screenshot_20250802-133117_1_srbty7.jpg",
+                genre: "Sci-Fi, Action",
+                price: 370,
+                seats: 42,
+                rating: 4.4
+            },
+            {
+                title: "Avatar: The Way of Water",
+                img: "https://res.cloudinary.com/dq9kmmf7b/image/upload/v1754121972/Screenshot_20250802-133448_2_ijcoao.jpg",
+                genre: "Fantasy, Sci-Fi",
+                price: 400,
+                seats: 50,
+                rating: 4.7
+            },
+            {
+                title: "Jawan",
+                img: "https://res.cloudinary.com/dq9kmmf7b/image/upload/v1754139886/Screenshot_20250802-183322_2_g6fmmm.jpg",
+                genre: "Action, Thriller",
+                price: 290,
+                seats: 30,
+                rating: 4.0
+            },
+            {
+                title: "Barbie",
+                img: "https://res.cloudinary.com/dq9kmmf7b/image/upload/v1754122578/Screenshot_20250802-134450_1_mwspg4.jpg",
+                genre: "Comedy, Adventure",
+                price: 320,
+                seats: 52,
+                rating: 4.2
+            },
+            {
+                title: "Oppenheimer",
+                img: "https://res.cloudinary.com/dq9kmmf7b/image/upload/v1754122754/Screenshot_20250802-134815_1_jatmhg.jpg",
+                genre: "Drama, Biography",
+                price: 360,
+                seats: 35,
+                rating: 4.6
+            },
+            {
+                title: "Leo",
+                img: "https://res.cloudinary.com/dq9kmmf7b/image/upload/v1754123091/Screenshot_20250802-135051_2_uliwwd.jpg",
+                genre: "Action, Thriller",
+                price: 340,
+                seats: 36,
+                rating: 3.4
+            },
+            {
+                title: "Salaar: Cease Fire",
+                img: "https://res.cloudinary.com/dq9kmmf7b/image/upload/v1754123119/Screenshot_20250802-135208_2_vhe7ko.jpg",
+                genre: "Action, Drama",
+                price: 310,
+                seats: 40,
+                rating: 3.9
+            },
+            {
+                title: "Pushpa 2: The Rule",
+                img: "https://res.cloudinary.com/dq9kmmf7b/image/upload/v1754123310/Screenshot_20250802-135728_2_aqcpig.jpg",
+                genre: "Drama, Action",
+                price: 350,
+                seats: 34,
+                rating: 4.3
+            },
+            {
+                title: "The Marvels",
+                img: "https://res.cloudinary.com/dq9kmmf7b/image/upload/v1754123470/Screenshot_20250802-140010_1_fdv3pg.jpg",
+                genre: "Action, Sci-Fi",
+                price: 355,
+                seats: 39,
+                rating: 3.7
+            }
+        ];
+        let theatreList = [{
+                name: "Grand Luxe Cinemas",
+                img: "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80",
+                location: "Etcherla, Andhra Pradesh",
+                capacity: 50,
+                amenities: "4K Projection, Dolby Audio, VIP Lounge",
+                desc: "Perfect for birthdays and private events."
+            },
+            {
+                name: "Platinum Screens",
+                img: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80",
+                location: "Etcherla",
+                capacity: 35,
+                amenities: "Recliners, Large Screen, Private Entrance",
+                desc: "Best for anniversaries and family celebrations."
+            },
+            {
+                name: "Cine Cherry Hall",
+                img: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80",
+                location: "Etcherla",
+                capacity: 60,
+                amenities: "Family Friendly, Kids Play Area, Snacks Bar",
+                desc: "Great for kids' birthdays and reunions."
+            }
+        ];
+        let bookingsArr = [];
+        let adminPassword = "admin123";
+
+        function getAllSeats(movieIdx) {
+            let total = movieList[movieIdx].seats;
+            const rows = Math.ceil(total / 10);
+            let seatArr = [];
+            for (let r = 0; r < rows; r++)
+                for (let n = 1; n <= 10; n++)
+                    if (seatArr.length < total) seatArr.push(String.fromCharCode(65 + r) + n);
+            return seatArr;
+        }
+
+        function getBookedSeats(movieIdx) {
+            let title = movieList[movieIdx].title;
+            let seats = [];
+            bookingsArr.forEach(function(b) {
+                if (b.movie && (b.movie + "").startsWith(title) && Array.isArray(b.seats)) seats = seats.concat(b.seats);
+            });
+            return seats;
+        }
+
+        function goPage(pg) {
+            ["home", "home2", "theatres", "theatre-details", "movies", "book", "bookings", "pricing", "faq", "gallery", "admin"].forEach(function(pid) {
+                var el = document.getElementById('page-' + pid);
+                if (el) el.style.display = "none";
+            });
+            if (pg === "home") {
+                document.getElementById('page-home').style.display = '';
+                document.getElementById('page-home2').style.display = '';
+            } else {
+                var el = document.getElementById('page-' + pg);
+                if (el) el.style.display = '';
+            }
+            document.querySelectorAll(".nav-menu a").forEach(function(link) {
+                link.classList.remove("active");
+            });
+            var activeLink = document.querySelector('.nav-menu a[data-page="' + pg + '"]');
+            if (activeLink) activeLink.classList.add("active");
+            if (pg === "movies") renderMoviesSection();
+            if (pg === "theatres") renderTheatresSection();
+            if (pg === "bookings") renderBookings();
+            if (pg === "admin") {
+                document.getElementById('adminBookingsTable').style.display = "none";
+                document.getElementById('adminLogin').style.display = "";
+                if (document.getElementById('adminLoginMsg')) document.getElementById('adminLoginMsg').textContent = '';
+            }
+            if (pg === "book") {
+                populateMovieSelect();
+                populateTheatreSelect();
+                updateSeatSelectionMap();
+                document.getElementById('seat-warning').style.display = 'none';
+            }
+        }
+        document.querySelectorAll('.nav-menu a').forEach(function(link) {
+            link.onclick = function(e) {
+                e.preventDefault();
+                goPage(this.dataset.page);
+                if (window.innerWidth < 900) {
+                    document.getElementById('nav-toggle').checked = false;
+                    document.querySelector('.nav-menu').classList.remove("open");
+                }
+            }
+        });
+        const navToggle = document.getElementById('nav-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+        navToggle && navToggle.addEventListener('change', function() {
+            if (navToggle.checked) navMenu.classList.add('open');
+            else navMenu.classList.remove('open');
+        });
+        document.getElementById('next-home').onclick = () => goPage('theatres');
+        document.getElementById('back-theatres').onclick = () => goPage('home');
+        document.getElementById('next-theatres').onclick = () => goPage('movies');
+        document.getElementById('back-movies').onclick = () => goPage('theatres');
+        document.getElementById('next-movies').onclick = () => goPage('book');
+        document.getElementById('back-book').onclick = () => goPage('movies');
+        document.getElementById('next-bookings').onclick = () => goPage('bookings');
+        document.getElementById('back-bookings').onclick = () => goPage('book');
+        document.getElementById('back-pricing').onclick = () => goPage('bookings');
+        document.getElementById('next-pricing').onclick = () => goPage('pricing');
+        document.getElementById('next-faq').onclick = () => goPage('faq');
+        document.getElementById('back-faq').onclick = () => goPage('pricing');
+        document.getElementById('next-gallery').onclick = () => goPage('gallery');
+        document.getElementById('back-gallery').onclick = () => goPage('faq');
+        document.getElementById('next-admin').onclick = () => goPage('admin');
+        document.getElementById('back-admin').onclick = () => goPage('gallery');
+        document.getElementById('back-theatre-details').onclick = () => goPage('theatres');
+        document.getElementById('next-theatre-details').onclick = () => goPage('movies');
+        goPage('home');
+
+        function renderTheatresSection() {
+            let c = '';
+            theatreList.forEach(function(t, idx) {
+                c += '<div class="theatre-card">' +
+                    '<img src="' + t.img + '" alt="' + t.name + '" onerror="this.src=\'https://via.placeholder.com/226x178?text=No+Image\'"><h3>' + t.name + '</h3><p>Capacity: ' + t.capacity + '<br>' + t.amenities + '<br></p>' +
+                    '<button class="btn" onclick="viewTheatreDetails(' + idx + ');event.stopPropagation();">View Details</button>' +
+                    '<button class="btn" onclick="bookTheatreDirect(' + idx + ');event.stopPropagation();">Book This Theatre</button>' +
+                    '</div>';
+            });
+            document.getElementById('theatre-cards').innerHTML = c;
+        }
+
+        function viewTheatreDetails(idx) {
+            let t = theatreList[idx];
+            document.getElementById('theatre-detail-content').innerHTML =
+                `<img src="${t.img}" alt="" style="width:100%;border-radius:10px;max-height:250px;object-fit:cover" onerror="this.src='https://via.placeholder.com/400x250?text=No+Image'" />
+<p><b>Name:</b> ${t.name}<br>
+<b>Location:</b> ${t.location}<br>
+<b>Capacity:</b> ${t.capacity}<br>
+<b>Amenities:</b> ${t.amenities}<br>
+<b>Description:</b> ${t.desc}</p>`;
+            goPage('theatre-details');
+            document.getElementById('book-this-theatre').onclick = function(e) {
+                bookTheatreDirect(idx);
+                e.preventDefault();
+            }
+        }
+
+        function bookTheatreDirect(idx) {
+            goPage('book');
+            setTimeout(() => {
+                populateTheatreSelect();
+                document.getElementById('theatre-select').selectedIndex = idx;
+            }, 50);
+        }
+
+        function renderMoviesSection() {
+            let c = '';
+            movieList.forEach(function(m, i) {
+                let stars = "";
+                let filled = Math.floor(m.rating);
+                for (let s = 0; s < filled; s++) stars += "&#11088;";
+                if (m.rating % 1 >= 0.5) stars += '<span style="color:#ffd531;font-size:1.13em;margin-left:-2px">&#189;</span>';
+                let ratingDiv = `<div class="movie-rating" title="Rating: ${m.rating}">${stars} (${m.rating})</div>`;
+                c += `<div class="movie-card">
+                <img src="${m.img}" alt="${m.title}" onerror="this.src='https://via.placeholder.com/226x178?text=No+Image'">
+                <h3 style="margin:8px 0 4px">${m.title}</h3>
+                ${ratingDiv}
+                <div style="font-size:.97em;color:#384996"><b>${m.genre}</b></div>
+                <div style="font-size:.95em;color:#2056b2;margin-top:3px">₹${m.price} per ticket</div>
+                <button class="btn" onclick="pickMovieAndBook(${i});event.stopPropagation();">Book</button>
+            </div>`;
+            });
+            document.getElementById('movies-list').innerHTML = c;
+        }
+
+        function pickMovieAndBook(idx) {
+            goPage('book');
+            setTimeout(() => {
+                populateMovieSelect();
+                document.getElementById('movie-select').selectedIndex = idx;
+                updateSeatSelectionMap();
+            }, 50);
+        }
+
+        function populateMovieSelect() {
+            var sel = document.getElementById('movie-select');
+            if (!sel) return;
+            sel.innerHTML = '';
+            movieList.forEach(function(mov) {
+                var opt = document.createElement('option');
+                opt.value = mov.title + ' (₹' + mov.price + '/ticket)';
+                opt.textContent = mov.title + ' (₹' + mov.price + '/ticket)';
+                sel.appendChild(opt);
+            });
+            var opt = document.createElement('option');
+            opt.value = 'Other/Bring Your Own';
+            opt.textContent = 'Other/Bring Your Own';
+            sel.appendChild(opt);
+        }
+
+        function populateTheatreSelect() {
+            var sel = document.getElementById('theatre-select');
+            if (!sel) return;
+            sel.innerHTML = '';
+            theatreList.forEach(function(t) {
+                var opt = document.createElement('option');
+                opt.value = t.name;
+                opt.textContent = t.name;
+                sel.appendChild(opt);
+            });
+        }
+
+        function updateSeatSelectionMap() {
+            var sel = document.getElementById('movie-select'),
+                info = document.getElementById('seat-count-info'),
+                seatDiv = document.getElementById('seat-map-container'),
+                warning = document.getElementById('seat-warning');
+            seatDiv.innerHTML = "";
+            warning.style.display = "none";
+            if (!sel) return;
+            var idx = -1;
+            for (var i = 0; i < movieList.length; i++)
+                if (sel.value && sel.value.startsWith(movieList[i].title)) {
+                    idx = i;
+                    break;
+                }
+            if (idx < 0) {
+                info.innerHTML = "Select movie.";
+                return;
+            }
+            var allSeats = getAllSeats(idx),
+                taken = getBookedSeats(idx),
+                stat = {
+                    total: allSeats.length,
+                    booked: taken.length,
+                    available: Math.max(0, allSeats.length - taken.length)
+                };
+            info.textContent = 'Seats available: ' + stat.available + ' / ' + stat.total;
+            document.getElementById('fakePayNow').disabled = stat.available === 0;
+            let html = '<div class="seat-map-label">Select seats:</div><div class="seat-map" id="mainSeatMap"></div>';
+            seatDiv.innerHTML = html;
+            let seatMap = seatDiv.querySelector('.seat-map');
+            allSeats.forEach(function(sid) {
+                let btn = document.createElement('button');
+                btn.className = 'seat-btn';
+                btn.textContent = sid;
+                if (taken.includes(sid)) {
+                    btn.classList.add("booked");
+                    btn.disabled = true;
+                    btn.title = "Already booked";
+                }
+                btn.onclick = function() {
+                    if (btn.classList.contains('booked')) return;
+                    btn.classList.toggle('selected');
+                };
+                seatMap.appendChild(btn);
+            });
+        }
+        document.getElementById('movie-select').addEventListener('change', updateSeatSelectionMap);
+        document.getElementById('fakePayNow').onclick = function() {
+            let form = document.getElementById('bookingForm');
+            let data = {};
+            Array.from(form.elements).forEach(el => {
+                if (el.name) data[el.name] = el.value;
+            });
+            let movIdx = -1;
+            for (let i = 0; i < movieList.length; i++)
+                if (data.movie && data.movie.startsWith(movieList[i].title)) {
+                    movIdx = i;
+                    break;
+                }
+            let selBtns = Array.from(document.getElementById('mainSeatMap').querySelectorAll('.seat-btn.selected'));
+            if (!selBtns.length && movIdx !== -1) {
+                document.getElementById('seat-warning').textContent = "Please select seat(s).";
+                document.getElementById('seat-warning').style.display = '';
+                return;
+            }
+            if (form.checkValidity() === false) return form.reportValidity();
+            data.seats = selBtns.map(b => b.textContent);
+            data._ts = Date.now();
+            bookingsArr.push(data);
+            document.getElementById('payment-status').style.display = '';
+            document.getElementById('fakePayNow').disabled = true;
+            setTimeout(() => {
+                renderBookings();
+                goPage('bookings');
+                setTimeout(() => {
+                    document.getElementById('payment-status').style.display = 'none';
+                }, 800);
+            }, 900);
+        };
+        document.getElementById('movie-select').addEventListener('change', updateSeatSelectionMap);
+
+        function renderBookings() {
+            let c = '',
+                n = 1;
+            if (!bookingsArr.length) {
+                c = `<div>No bookings yet. After you book, bookings will appear here.</div>`;
+            } else {
+                c = '<table style="width:100%;font-size:1.04em;margin-top:6px;border-radius:10px;overflow:hidden;box-shadow:0 0 12px #b9c8db25"><tr><th>#</th><th>Name</th><th>Theatre</th><th>Movie</th><th>Event</th><th>Date</th><th>Time</th><th>Seats</th></tr>';
+                bookingsArr.forEach(function(b) {
+                    c += `<tr>
+                <td>${n++}</td>
+                <td>${b.name||'-'}</td>
+                <td>${b.theatre||'-'}</td>
+                <td>${b.movie||'-'}</td>
+                <td>${b.eventType||'-'}</td>
+                <td>${b.date||'-'}</td>
+                <td>${b.time||'-'}</td>
+                <td>${(b.seats||[]).join(', ')||'-'}</td>
+            </tr>`;
+                });
+                c += '</table>';
+            }
+            document.getElementById('bookingsList').innerHTML = c;
+        }
+
+        document.getElementById('adminLogin').onsubmit = function(e) {
+            e.preventDefault();
+            let pass = document.getElementById('adminPass').value;
+            let out = document.getElementById('adminLoginMsg');
+            if (pass === adminPassword) {
+                out.textContent = "Access granted.";
+                out.style.display = "";
+                renderAdminBookings();
+                document.getElementById('adminLogin').style.display = "none";
+            } else {
+                out.textContent = "Incorrect password.";
+                out.style.display = "";
+            }
+        };
+
+        function renderAdminBookings() {
+            let tableDiv = document.getElementById('adminBookingsTable');
+            let c = '',
+                n = 1;
+            if (!bookingsArr.length) {
+                c = `<div>No bookings yet.</div>`;
+            } else {
+                c = '<table style="width:100%;font-size:1.04em;margin-top:6px;border-radius:10px;overflow:hidden;box-shadow:0 0 12px #b9c8db25"><tr><th>#</th><th>Name</th><th>Email</th><th>Theatre</th><th>Movie</th><th>Event Type</th><th>Date</th><th>Time</th><th>Seats</th></tr>';
+                bookingsArr.forEach(function(b) {
+                    c += `<tr>
+                <td>${n++}</td>
+                <td>${b.name||'-'}</td>
+                <td>${b.email||'-'}</td>
+                <td>${b.theatre||'-'}</td>
+                <td>${b.movie||'-'}</td>
+                <td>${b.eventType||'-'}</td>
+                <td>${b.date||'-'}</td>
+                <td>${b.time||'-'}</td>
+                <td>${(b.seats||[]).join(', ')||'-'}</td>
+            </tr>`;
+                });
+                c += '</table>';
+            }
+            tableDiv.innerHTML = c;
+            tableDiv.style.display = "";
+        }
+        window.onpopstate = () => goPage('home');
+    </script>
+</body>
+
+</html>
